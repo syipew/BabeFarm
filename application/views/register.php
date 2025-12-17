@@ -106,11 +106,11 @@
         </div>
 
 
-        <!-- Error & success message -->
+
         <?= validation_errors('<div style="color:red; margin-bottom:10px;">','</div>'); ?>
         <?= $this->session->flashdata('success'); ?>
 
-        <form method="post" action="<?= base_url('auth/register'); ?>">
+        <form method="post" action="<?= base_url('register/register'); ?>">
 
             <label>Nama Lengkap</label>
             <input type="text" name="nama" required>
@@ -132,7 +132,7 @@
 
         <p class="footer-text">
             Sudah punya akun?
-            <a href="<?= base_url('auth/login'); ?>">Masuk</a>
+            <a href="<?= base_url('register/login'); ?>">Masuk</a>
         </p>
 
     </div>
