@@ -7,12 +7,12 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #eef1f7;
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         .bg-container {
             width: 100%;
-            min-height: fixed;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,8 +37,7 @@
         }
 
         .logo {
-            width: 100px; 
-            height: auto;
+            width: 100px;
         }
 
         label {
@@ -66,7 +65,6 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
         }
 
         button:hover {
@@ -84,10 +82,6 @@
             text-decoration: none;
         }
 
-        .footer-text a:hover {
-            text-decoration: underline;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -98,45 +92,37 @@
 <body>
 
 <div class="bg-container">
-
     <div class="card">
 
         <div class="logo-container">
             <img src="<?= base_url('assets/logo.png'); ?>" class="logo">
         </div>
-
-
-        <!-- Error & success message -->
-        <?= validation_errors('<div style="color:red; margin-bottom:10px;">','</div>'); ?>
-        <?= $this->session->flashdata('success'); ?>
-
-        <form method="post" action="<?= base_url('auth/register'); ?>">
+        <form method="post" action="<?= site_url('register'); ?>">
 
             <label>Nama Lengkap</label>
-            <input type="text" name="nama" required>
+            <input type="text" name="nama" value="<?= set_value('nama'); ?>" required>
 
             <label>Username</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" value="<?= set_value('username'); ?>" required>
 
             <label>Password</label>
             <input type="password" name="password" required>
 
             <label>Email</label>
-            <input type="email" name="email" required>
+            <input type="email" name="email" value="<?= set_value('email'); ?>" required>
 
             <label>Nomor Telepon</label>
-            <input type="text" name="telepon" required>
+            <input type="text" name="telepon" value="<?= set_value('telepon'); ?>" required>
 
             <button type="submit">Daftar</button>
         </form>
 
         <p class="footer-text">
             Sudah punya akun?
-            <a href="<?= base_url('auth/login'); ?>">Masuk</a>
+            <a href="<?= site_url('login'); ?>">Masuk</a>
         </p>
 
     </div>
-
 </div>
 
 </body>
