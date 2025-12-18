@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost:8111',
+	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'babefarm',
+	'database' => 'babe_farm',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
