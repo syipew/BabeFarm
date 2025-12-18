@@ -97,7 +97,13 @@
         <div class="logo-container">
             <img src="<?= base_url('assets/logo.png'); ?>" class="logo">
         </div>
-        <form method="post" action="<?= site_url('register'); ?>">
+
+
+
+        <?= validation_errors('<div style="color:red; margin-bottom:10px;">','</div>'); ?>
+        <?= $this->session->flashdata('success'); ?>
+
+        <form method="post" action="<?= base_url('register/register'); ?>">
 
             <label>Nama Lengkap</label>
             <input type="text" name="nama" value="<?= set_value('nama'); ?>" required>
@@ -119,7 +125,7 @@
 
         <p class="footer-text">
             Sudah punya akun?
-            <a href="<?= site_url('login'); ?>">Masuk</a>
+            <a href="<?= base_url('register/login'); ?>">Masuk</a>
         </p>
 
     </div>
