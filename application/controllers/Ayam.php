@@ -14,24 +14,18 @@ class Ayam extends CI_Controller {
     {
         $data['ayam'] = $this->Ayam_model->get_all();
 
-        $this->load->view('templates/header');
-        $this->load->view('templates/navbar');
-        $this->load->view('data_ayam', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('header');
+        $this->load->view('ayam/data_ayam', $data);
     }
     public function tambah()
 {
-    $this->load->view('templates/header');
-    $this->load->view('templates/navbar');
+    $this->load->view('header');
     $this->load->view('ayam/tambah');
-    $this->load->view('templates/footer');
 }
 public function edit()
 {
-    $this->load->view('templates/header');
-    $this->load->view('templates/navbar');
+    $this->load->view('header');
     $this->load->view('ayam/edit');
-    $this->load->view('templates/footer');
 }
 
 }

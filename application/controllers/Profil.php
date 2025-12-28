@@ -14,8 +14,7 @@ class Profil extends CI_Controller {
     {
         $data['profil'] = $this->Profil_model->get_profil();
 
-        $this->load->view('templates/header');
-        $this->load->view('templates/navbar');
+        $this->load->view('header');
         $this->load->view('profil/data_profil', $data);
     }
 
@@ -23,8 +22,7 @@ class Profil extends CI_Controller {
     {
         $data['profil'] = $this->Profil_model->get_profil();
 
-        $this->load->view('templates/header');
-        $this->load->view('templates/navbar');
+        $this->load->view('header');
         $this->load->view('profil/edit_profil', $data);
     }
 

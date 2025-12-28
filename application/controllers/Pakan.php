@@ -15,9 +15,8 @@ public function index()
     $data['pakan'] = $this->Pakan_model->get_all();
     $data['alert'] = $this->session->flashdata('alert');
 
-    $this->load->view('templates/header');
+    $this->load->view('header');
     $this->load->view('pakan/index', $data);
-    $this->load->view('templates/footer');
 }
 
 
@@ -45,9 +44,8 @@ public function tambah() {
     }
 
     // tampilan form
-    $this->load->view('templates/header');
+    $this->load->view('header');
     $this->load->view('pakan/tambah');
-    $this->load->view('templates/footer');
 }
 
 public function edit($id) {
@@ -67,9 +65,8 @@ public function edit($id) {
     }
 
     $data['pakan'] = $this->Pakan_model->get_by_id($id);
-    $this->load->view('templates/header');
+    $this->load->view('header');
     $this->load->view('pakan/edit', $data);
-    $this->load->view('templates/footer');
 }
 
 public function hapus($id)

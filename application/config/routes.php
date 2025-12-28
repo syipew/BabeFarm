@@ -55,3 +55,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['register'] = 'register';
 $route['login']    = 'login';
+$route['ayam'] = 'ayam';
+$route['pakan'] = 'pakan';
+$route['kesehatan'] = 'kesehatan';
+

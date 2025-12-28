@@ -14,24 +14,18 @@ class Kesehatan extends CI_Controller {
     {
         $data['kesehatan'] = $this->Kesehatan_model->get_all();
 
-        $this->load->view('templates/header');
-        $this->load->view('templates/navbar');
-        $this->load->view('data_kesehatan', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('header');
+        $this->load->view('kesehatan/data_kesehatan', $data);
     }
     public function tambah()
 {
-    $this->load->view('templates/header');
-    $this->load->view('templates/navbar');
+    $this->load->view('header');
     $this->load->view('kesehatan/tambah');
-    $this->load->view('templates/footer');
 }
 public function edit()
 {
-    $this->load->view('templates/header');
-    $this->load->view('templates/navbar');
+    $this->load->view('header');
     $this->load->view('kesehatan/edit');
-    $this->load->view('templates/footer');
 }
 
 }
