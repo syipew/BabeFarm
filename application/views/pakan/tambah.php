@@ -283,8 +283,6 @@
 </style>
 
 <body>
-    <div class="overlay"></div>
-    
     <div class="form-container">
         <div class="form-card">
             <!-- Form Header -->

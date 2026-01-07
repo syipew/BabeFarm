@@ -27,10 +27,10 @@
             line-height: 1.6;
         }
 
-        /* HEADER STYLES */
+        /* HEADER STYLES - DIKECILKAN DAN DIRAPIKAN */
         .main-header {
             background: linear-gradient(135deg, #0d2f4f 0%, #10375C 100%);
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -46,16 +46,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 8px 0; /* DIKECILKAN dari 12px 0 */
         }
 
-        /* LOGO SECTION */
+        /* LOGO SECTION - DIGESER DARI PINGGIR DAN DIKECILKAN */
         .logo-section {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
             transition: transform 0.2s ease;
+            margin-left: 15px; /* DIGESER KE KANAN */
         }
 
         .logo-section:hover {
@@ -63,24 +64,21 @@
         }
 
         .logo-circle {
-            width: 100px;
-            height: 40px;
+            width: 85px; /* DIKECILKAN dari 100px */
+            height: 35px; /* DIKECILKAN dari 40px */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            /*background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);*/
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* DIKECILKAN dari 3px 8px */
         }
 
         .logo-img {
-            width: 150px;
-            height: 150px;
-        }
-
-
-        .logo-circle i {
-            color: #10375C;
-            font-size: 22px;
-            font-weight: 900;
+            width: 160px; /* DIKECILKAN dari 150px */
+            height: 160px; /* DIKECILKAN dari 150px */
+            object-fit: contain;
         }
 
         .logo-text {
@@ -90,26 +88,25 @@
 
         .logo-main {
             color: white;
-            font-size: 26px;
+            font-size: 24px; /* DIKECILKAN dari 26px */
             font-weight: 800;
             letter-spacing: -0.5px;
             line-height: 1;
         }
 
-
-        /* NAVIGATION */
+        /* NAVIGATION - DIKECILKAN */
         .nav-container {
             flex: 1;
-            margin: 0 30px;
+            margin: 0 25px; /* DIKECILKAN dari 30px */
         }
 
         .nav-menu {
             display: flex;
-            gap: 2px;
+            gap: 1px; /* DIKECILKAN dari 2px */
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border-radius: 10px;
-            padding: 6px;
+            padding: 5px; /* DIKECILKAN dari 6px */
             max-width: 850px;
             margin: 0 auto;
         }
@@ -126,23 +123,23 @@
             justify-content: center;
             text-decoration: none;
             color: rgba(255, 255, 255, 0.85);
-            padding: 10px 8px;
+            padding: 8px 6px; /* DIKECILKAN dari 10px 8px */
             border-radius: 8px;
             transition: all 0.25s ease;
-            min-height: 56px;
+            min-height: 50px; /* DIKECILKAN dari 56px */
             position: relative;
         }
 
         .nav-link i {
-            font-size: 16px;
-            margin-bottom: 4px;
+            font-size: 15px; /* DIKECILKAN dari 16px */
+            margin-bottom: 3px; /* DIKECILKAN dari 4px */
             transition: all 0.25s ease;
         }
 
         .nav-link span {
-            font-size: 12px;
+            font-size: 11px; /* DIKECILKAN dari 12px */
             font-weight: 500;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px; /* DIKECILKAN dari 0.3px */
         }
 
         .nav-link:hover {
@@ -164,7 +161,7 @@
         .nav-link.active::after {
             content: '';
             position: absolute;
-            bottom: -6px;
+            bottom: -4px; /* DIKECILKAN dari -6px */
             left: 50%;
             transform: translateX(-50%);
             width: 4px;
@@ -173,18 +170,18 @@
             border-radius: 50%;
         }
 
-        /* USER SECTION */
+        /* USER SECTION - DIKECILKAN */
         .user-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px; /* DIKECILKAN dari 15px */
         }
 
         .user-profile-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
+            gap: 8px; /* DIKECILKAN dari 10px */
+            padding: 6px 12px; /* DIKECILKAN dari 8px 16px */
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border-radius: 10px;
@@ -200,8 +197,8 @@
         }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px; /* DIKECILKAN dari 36px */
+            height: 32px; /* DIKECILKAN dari 36px */
             background: linear-gradient(135deg, #28a745, #20c997);
             border-radius: 50%;
             display: flex;
@@ -209,8 +206,8 @@
             justify-content: center;
             color: white;
             font-weight: 700;
-            font-size: 15px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            font-size: 14px; /* DIKECILKAN dari 15px */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* DIKECILKAN dari 3px 8px */
         }
 
         .user-info {
@@ -221,12 +218,12 @@
         .user-name {
             color: white;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px; /* DIKECILKAN dari 13px */
         }
 
         .user-status {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 11px;
+            font-size: 10px; /* DIKECILKAN dari 11px */
             margin-top: 1px;
         }
 
@@ -234,27 +231,27 @@
             background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 8px 14px; /* DIKECILKAN dari 10px 18px */
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px; /* DIKECILKAN dari 13px */
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px; /* DIKECILKAN dari 6px */
             transition: all 0.25s ease;
-            box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3); /* DIKECILKAN dari 3px 8px */
             text-decoration: none;
         }
 
         .logout-btn:hover {
             background: linear-gradient(135deg, #bd2130 0%, #dc3545 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(220, 53, 69, 0.4);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4); /* DIKECILKAN dari 5px 12px */
         }
 
         .logout-btn i {
-            font-size: 12px;
+            font-size: 11px; /* DIKECILKAN dari 12px */
         }
 
         /* MOBILE MENU TOGGLE */
@@ -263,12 +260,13 @@
             background: none;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 18px; /* DIKECILKAN dari 20px */
             cursor: pointer;
-            padding: 8px;
+            padding: 6px; /* DIKECILKAN dari 8px */
+            margin-right: 10px; /* DIGESER DARI PINGGIR */
         }
 
-        /* RESPONSIVE DESIGN */
+        /* RESPONSIVE DESIGN - DIKECILKAN DAN DISESUAIKAN */
         @media (max-width: 1200px) {
             .nav-container {
                 margin: 0 20px;
@@ -279,23 +277,24 @@
             }
             
             .nav-link {
-                padding: 8px 6px;
-                min-height: 52px;
+                padding: 6px 4px; /* DIKECILKAN dari 8px 6px */
+                min-height: 46px; /* DIKECILKAN dari 52px */
             }
             
             .nav-link span {
-                font-size: 11px;
+                font-size: 10px; /* DIKECILKAN dari 11px */
             }
         }
 
         @media (max-width: 992px) {
             .header-content {
                 flex-wrap: wrap;
-                padding: 10px 0;
+                padding: 6px 0; /* DIKECILKAN dari 10px 0 */
             }
             
             .logo-section {
                 order: 1;
+                margin-left: 10px; /* DIPERTAHANKAN UNTUK MOBILE */
             }
             
             .mobile-toggle {
@@ -305,7 +304,7 @@
             
             .nav-container {
                 order: 4;
-                margin: 10px 0 0 0;
+                margin: 8px 0 0 0; /* DIKECILKAN dari 10px 0 0 0 */
                 width: 100%;
                 display: none;
             }
@@ -317,31 +316,32 @@
             .user-section {
                 order: 3;
                 margin-left: auto;
+                margin-right: 10px; /* DIGESER DARI PINGGIR */
             }
             
             .nav-menu {
                 flex-direction: column;
                 background: rgba(255, 255, 255, 0.1);
-                padding: 8px;
+                padding: 6px; /* DIKECILKAN dari 8px */
             }
             
             .nav-link {
                 flex-direction: row;
                 justify-content: flex-start;
-                padding: 12px 15px;
+                padding: 10px 12px; /* DIKECILKAN dari 12px 15px */
                 min-height: auto;
                 text-align: left;
             }
             
             .nav-link i {
                 margin-bottom: 0;
-                margin-right: 12px;
-                width: 20px;
+                margin-right: 10px; /* DIKECILKAN dari 12px */
+                width: 18px; /* DIKECILKAN dari 20px */
                 text-align: center;
             }
             
             .nav-link span {
-                font-size: 13px;
+                font-size: 12px; /* DIKECILKAN dari 13px */
             }
             
             .user-profile-link .user-info {
@@ -355,30 +355,31 @@
             }
             
             .logo-circle {
-                width: 42px;
-                height: 42px;
+                width: 40px; /* DIKECILKAN dari 42px */
+                height: 40px; /* DIKECILKAN dari 42px */
+            }
+            
+            .logo-img {
+                width: 100px; /* DIKECILKAN dari default */
+                height: 100px; /* DIKECILKAN dari default */
             }
             
             .logo-circle i {
-                font-size: 20px;
+                font-size: 18px; /* DIKECILKAN dari 20px */
             }
             
             .logo-main {
-                font-size: 22px;
-            }
-            
-            .logo-sub {
-                font-size: 10px;
+                font-size: 20px; /* DIKECILKAN dari 22px */
             }
             
             .user-profile-link {
-                padding: 6px 12px;
+                padding: 4px 8px; /* DIKECILKAN dari 6px 12px */
             }
             
             .user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 13px;
+                width: 28px; /* DIKECILKAN dari 32px */
+                height: 28px; /* DIKECILKAN dari 32px */
+                font-size: 12px; /* DIKECILKAN dari 13px */
             }
             
             .user-info {
@@ -386,8 +387,8 @@
             }
             
             .logout-btn {
-                padding: 8px 12px;
-                font-size: 12px;
+                padding: 6px 10px; /* DIKECILKAN dari 8px 12px */
+                font-size: 11px; /* DIKECILKAN dari 12px */
             }
             
             .logout-btn span {
@@ -395,8 +396,13 @@
             }
             
             .logout-btn i {
-                font-size: 14px;
+                font-size: 12px; /* DIKECILKAN dari 14px */
                 margin: 0;
+            }
+            
+            .mobile-toggle {
+                padding: 5px; /* DIKECILKAN dari 6px */
+                font-size: 16px; /* DIKECILKAN dari 18px */
             }
         }
 
@@ -408,7 +414,7 @@
         /* PAGE CONTENT */
         .page-content {
             max-width: 1400px;
-            margin: 30px auto;
+            margin: 25px auto; /* DIKECILKAN dari 30px auto */
             padding: 0 20px;
         }
     </style>
