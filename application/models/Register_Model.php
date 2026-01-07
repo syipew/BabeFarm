@@ -7,10 +7,10 @@ class Register_model extends CI_Model {
         return $this->db->insert('admin', $data);
     }
 
-    public function getUserByUsername($username) {
+    public function get_by_username($username)
+    {
         return $this->db
-            ->where('username', $username)
-            ->get('admin')
+            ->get_where('admin', ['username' => $username])
             ->row();
     }
 }

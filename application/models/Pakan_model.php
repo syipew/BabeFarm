@@ -24,4 +24,18 @@ class Pakan_model extends CI_Model {
     public function delete($id) {
         return $this->db->delete($this->table, ['id_pakan' => $id]);
     }
+
+    public function get_total_stok() {
+        $this->db->select_sum('stok_sisa');
+        $query = $this->db->get('pakan');
+        return $query->row()->stok_sisa ?: 0;
+    }
+
+    public function get_stok_sisa() {
+        $this->db->select('stok_sisa');
+        $this->db->order_by('id_pakan', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('pakan');
+        return $query->row()->stok_sisa ?: 0;
+    }
 }

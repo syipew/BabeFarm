@@ -3,96 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BabeFarm</title>
+    <title>BabeFarm - Manajemen Peternakan Ayam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        body {
+        :root {
+            --primary-color: #10375C;
+            --secondary-color: #f0ad4e;
+            --accent-color: #e4b216;
+            --light-color: #f8f9fa;
+            --dark-color: #002b5c;
+        }
+
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* NAVBAR */
-        .navbar {
-            background: #e4b216;
-            padding: 15px 40px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* HEADER STYLES */
+        .main-header {
+            background: linear-gradient(135deg, #0d2f4f 0%, #10375C 100%);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-weight: bold;
+            justify-content: space-between;
+            padding: 12px 0;
         }
 
-        .nav-links a {
-            margin-right: 25px;
+        /* LOGO SECTION */
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             text-decoration: none;
-            color: black;
-            font-size: 16px;
-            font-weight: normal;
+            transition: transform 0.2s ease;
         }
 
-        .nav-links a:hover {
-            text-decoration: underline;
+        .logo-section:hover {
+            transform: translateX(-2px);
         }
 
-        .nav-actions a {
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-left: 6px;
+        .logo-circle {
+            width: 100px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-profil {
-            background: #e4b216;
-            color: black;
-            font-size: 13px;   
+        .logo-img {
+            width: 150px;
+            height: 150px;
         }
-        
-        .btn-logout {
-            background: #002b5c;
+
+
+        .logo-circle i {
+            color: #10375C;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
             color: white;
-            font-size: 12px;   
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
         }
 
-        /* FORM */
-        .form-group {
-            margin-bottom: 15px;
+
+        /* NAVIGATION */
+        .nav-container {
+            flex: 1;
+            margin: 0 30px;
         }
 
-        .form-group label {
+        .nav-menu {
+            display: flex;
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 6px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 10px 8px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            min-height: 56px;
+            position: relative;
+        }
+
+        .nav-link i {
+            font-size: 16px;
+            margin-bottom: 4px;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link span {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-link:hover {
+            background: rgba(240, 173, 78, 0.15);
+            color: #f0ad4e;
+            transform: translateY(-1px);
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-link.active {
+            background: rgba(240, 173, 78, 0.2);
+            color: #f0ad4e;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: #f0ad4e;
+            border-radius: 50%;
+        }
+
+        /* USER SECTION */
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-profile-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .user-profile-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .user-status {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            margin-top: 1px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+            box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #bd2130 0%, #dc3545 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        .logout-btn i {
+            font-size: 12px;
+        }
+
+        /* MOBILE MENU TOGGLE */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1200px) {
+            .nav-container {
+                margin: 0 20px;
+            }
+            
+            .nav-menu {
+                max-width: 750px;
+            }
+            
+            .nav-link {
+                padding: 8px 6px;
+                min-height: 52px;
+            }
+            
+            .nav-link span {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .header-content {
+                flex-wrap: wrap;
+                padding: 10px 0;
+            }
+            
+            .logo-section {
+                order: 1;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                order: 2;
+            }
+            
+            .nav-container {
+                order: 4;
+                margin: 10px 0 0 0;
+                width: 100%;
+                display: none;
+            }
+            
+            .nav-container.active {
+                display: block;
+            }
+            
+            .user-section {
+                order: 3;
+                margin-left: auto;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.1);
+                padding: 8px;
+            }
+            
+            .nav-link {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 12px 15px;
+                min-height: auto;
+                text-align: left;
+            }
+            
+            .nav-link i {
+                margin-bottom: 0;
+                margin-right: 12px;
+                width: 20px;
+                text-align: center;
+            }
+            
+            .nav-link span {
+                font-size: 13px;
+            }
+            
+            .user-profile-link .user-info {
+                display: block;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 0 15px;
+            }
+            
+            .logo-circle {
+                width: 42px;
+                height: 42px;
+            }
+            
+            .logo-circle i {
+                font-size: 20px;
+            }
+            
+            .logo-main {
+                font-size: 22px;
+            }
+            
+            .logo-sub {
+                font-size: 10px;
+            }
+            
+            .user-profile-link {
+                padding: 6px 12px;
+            }
+            
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .logout-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .logout-btn span {
+                display: none;
+            }
+            
+            .logout-btn i {
+                font-size: 14px;
+                margin: 0;
+            }
+        }
+
+        /* ACTIVE STATE INDICATOR */
+        .nav-link.active::after {
             display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: white;        
-            box-sizing: border-box;   
+        /* PAGE CONTENT */
+        .page-content {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div style="font-size: 22px; font-weight: bold;">
-        BABEFARM
-    </div>
+<header class="main-header">
+    <div class="header-container">
+        <div class="header-content">
+            <!-- Logo -->
+            <a href="<?= base_url('home') ?>" class="logo-section">
+                <div class="logo-circle">
+                    <img src="<?= base_url('assets/logo.png') ?>" alt="BabeFarm Logo" class="logo-img">
+                </div>
+            </a>
 
-    <div class="nav-links">
-        <a href="<?= base_url('home') ?>">Home</a>
-        <a href="<?= base_url('ayam') ?>">Data Ayam</a>
-        <a href="<?= base_url('pakan') ?>">Pakan</a>
-        <a href="<?= base_url('kesehatan') ?>">Kesehatan</a>
-        <a href="<?= base_url('produksi') ?>">Produksi</a>
-        <a href="<?= base_url('keuangan') ?>">Keuangan</a>
-        <a href="<?= base_url('laporan') ?>">Laporan</a>
-    </div>
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
 
-    <div class="nav-actions">
-        <a href="<?= base_url('profil') ?>" class="btn-profil">PROFIL</a>
-        <a href="<?= base_url('register/logout') ?>" class="btn-logout">LOGOUT</a>
+            <!-- Navigation -->
+            <div class="nav-container" id="navContainer">
+                <nav class="nav-menu">
+                    <div class="nav-item">
+                        <a href="<?= base_url('home') ?>" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('ayam') ?>" class="nav-link">
+                            <i class="fas fa-kiwi-bird"></i>
+                            <span>Data Ayam</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('pakan') ?>" class="nav-link">
+                            <i class="fas fa-seedling"></i>
+                            <span>Pakan</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('kesehatan') ?>" class="nav-link">
+                            <i class="fas fa-heartbeat"></i>
+                            <span>Kesehatan</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('produksi') ?>" class="nav-link">
+                            <i class="fas fa-industry"></i>
+                            <span>Produksi</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('keuangan') ?>" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Keuangan</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="<?= base_url('laporan') ?>" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Laporan</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- User Section -->
+            <div class="user-section">
+                <a href="<?= base_url('profil') ?>" class="user-profile-link">
+                    <div class="user-avatar">
+                        <?= strtoupper(substr($this->session->userdata('nama'), 0, 1)) ?>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name"><?= $this->session->userdata('nama') ?></div>
+                        <div class="user-status">Administrator</div>
+                    </div>
+                </a>
+                
+                <a href="<?= base_url('login/logout') ?>" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Keluar</span>
+                </a>
+            </div>
+        </div>
     </div>
-</div>
+</header>
+
+<main class="page-content">
+    <!-- Page content will be inserted here -->
+</main>
+
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+        const navContainer = document.getElementById('navContainer');
+        navContainer.classList.toggle('active');
+        
+        // Toggle icon
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('fa-bars')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+
+    // Set active navigation link based on current URL
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+            const relativePath = linkPath.replace('<?= base_url() ?>', '');
+            
+            // Exact match or partial match for parent pages
+            if (currentPath === linkPath || 
+                (relativePath !== '/' && currentPath.includes(relativePath))) {
+                link.classList.add('active');
+            }
+        });
+        
+        // Highlight profile link if on profile page
+        const profileLink = document.querySelector('.user-profile-link');
+        if (currentPath.includes('profil')) {
+            profileLink.style.background = 'rgba(240, 173, 78, 0.2)';
+        }
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const navContainer = document.getElementById('navContainer');
+        const mobileToggle = document.getElementById('mobileToggle');
+        
+        if (!navContainer.contains(event.target) && 
+            !mobileToggle.contains(event.target) &&
+            window.innerWidth <= 992) {
+            navContainer.classList.remove('active');
+            mobileToggle.querySelector('i').classList.remove('fa-times');
+            mobileToggle.querySelector('i').classList.add('fa-bars');
+        }
+    });
+</script>
+
+</body>
+</html>

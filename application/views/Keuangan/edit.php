@@ -4,13 +4,13 @@
     :root {
         --primary-color: #10375C;
         --secondary-color: #f1c40f;
-        --light-bg: #f4f6f6;
+        --light-bg: #f8f9fa;
     }
     
     body {
         margin: 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: url("<?= base_url('assets/produksi.jpg') ?>") no-repeat center center;
+        background: url("<?= base_url('assets/keuangan.jpg') ?>") no-repeat center center;
         background-size: cover;
         min-height: 100vh;
     }
@@ -26,21 +26,21 @@
     }
 
     .form-card {
-        background: rgba(244, 246, 246, 0.95);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        border-radius: 16px;
+        border-radius: 14px;
         padding: 35px 40px;
         width: 100%;
         position: relative;
         z-index: 999;
         max-width: 500px;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .form-header {
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
         position: relative;
         padding-bottom: 15px;
     }
@@ -82,7 +82,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .form-label i {
@@ -92,8 +92,8 @@
     }
 
     .form-control {
-        border: 1.5px solid #bfc5c7;
-        border-radius: 6px;
+        border: 1.5px solid #e0e6ef;
+        border-radius: 8px;
         padding: 10px 12px;
         font-size: 14px;
         width: 100%;
@@ -103,6 +103,25 @@
     }
 
     .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(16, 55, 92, 0.1);
+        background: white;
+        outline: none;
+    }
+
+    .form-select {
+        border: 1.5px solid #e0e6ef;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        width: 100%;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        cursor: pointer;
+    }
+
+    .form-select:focus {
         border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(16, 55, 92, 0.1);
         background: white;
@@ -172,13 +191,13 @@
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), #1a4d7c);
+        background: linear-gradient(135deg, #0b2c4d, var(--primary-color));
         color: white;
         box-shadow: 0 4px 12px rgba(16, 55, 92, 0.25);
     }
 
     .btn-primary:hover {
-        background: linear-gradient(135deg, #0b2c4d, var(--primary-color));
+        background: linear-gradient(135deg, var(--primary-color), #0b2c4d);
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(16, 55, 92, 0.35);
     }
@@ -231,6 +250,24 @@
         line-height: 1.5;
     }
 
+    /* Amount input styling */
+    .amount-input {
+        position: relative;
+    }
+
+    .amount-prefix {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        font-weight: 500;
+    }
+
+    .amount-input .form-control {
+        padding-left: 40px;
+    }
+
     /* Animations */
     @keyframes fadeIn {
         from {
@@ -272,28 +309,6 @@
             font-size: 22px;
         }
     }
-
-    /* Date picker styling */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        cursor: pointer;
-        opacity: 0.7;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator:hover {
-        opacity: 1;
-    }
-
-    /* Number input styling */
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        opacity: 0.6;
-        cursor: pointer;
-    }
-
-    input[type="number"]::-webkit-inner-spin-button:hover,
-    input[type="number"]::-webkit-outer-spin-button:hover {
-        opacity: 1;
-    }
 </style>
 
 <body>
@@ -301,100 +316,103 @@
         <div class="form-card">
             <!-- Form Header -->
             <div class="form-header">
-                <h2>Edit Data Produksi</h2>
-                <p>Perbarui data produksi yang sudah ada di sistem BabeFarm</p>
+                <h2>Edit Data Keuangan</h2>
+                <p>Perbarui transaksi keuangan di sistem BabeFarm</p>
             </div>
 
             <!-- Form -->
-            <form action="<?= site_url('produksi/update') ?>" method="post" id="formEditProduksi">
-                <input type="hidden" name="id_produksi" value="<?= $produksi->id_produksi ?? '' ?>">
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-kiwi-bird"></i>
-                            Jenis Ayam
-                        </label>
-                        
-                        <select name="id_kandang" class="form-control" required>
-                            <option value="">-- Pilih Jenis Ayam --</option>
-                            
-                            <?php if(isset($ayam)) : ?>
-                                <?php foreach($ayam as $a) : ?>
-                                    <?php 
-                                        // Cek apakah ID kandang di data produksi ($produksi->id_kandang)
-                                        // SAMA DENGAN ID kandang di loop ini ($a->id_kandang)?
-                                        // Jika sama, tambahkan attribute 'selected'
-                                        $selected = ($produksi->id_kandang == $a->id_kandang) ? 'selected' : '';
-                                    ?>
-                                    <option value="<?= $a->id_kandang ?>" <?= $selected ?>>
-                                        <?= $a->jenis_ayam ?> (Stok: <?= $a->jumlah_ayam ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                            
-                        </select>
-                        <span class="form-text">Jenis ayam yang menghasilkan produksi</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-calendar-day"></i>
-                            Tanggal Produksi
-                        </label>
-                        <input type="date" 
-                            name="tanggal_produksi" 
-                            class="form-control" 
-                            value="<?= $produksi->tanggal_produksi ?? date('Y-m-d') ?>"
-                            required>
-                        <span class="form-text">Tanggal produksi</span>
-                    </div>
+            <form action="<?= base_url('keuangan/update') ?>" method="post" id="formEditKeuangan">
+                <input type="hidden" name="id_keuangan" value="<?= $keuangan->id_keuangan ?>">
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-calendar-day"></i>
+                        Tanggal Transaksi
+                    </label>
+                    <input type="date" 
+                           name="tanggal_transaksi" 
+                           class="form-control"
+                           value="<?= $keuangan->tanggal_transaksi ?>"
+                           max="<?= date('Y-m-d') ?>"
+                           required>
+                    <span class="form-text">Pilih tanggal transaksi</span>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-layer-group"></i>
-                            Jumlah Produksi
+                            <i class="fas fa-exchange-alt"></i>
+                            Jenis Transaksi
                         </label>
-                        <input type="number" 
-                               name="jumlah_produksi" 
-                               class="form-control" 
-                               placeholder="0"
-                               min="0"
-                               value="<?= $produksi->jumlah_produksi ?? 0 ?>"
-                               required>
-                        <span class="form-text">Jumlah hasil produksi</span>
+                        <select name="jenis" class="form-select" required>
+                            <option value="pemasukan" <?= $keuangan->jenis == 'pemasukan' ? 'selected' : '' ?>>
+                                Pendapatan
+                            </option>
+                            <option value="pengeluaran" <?= $keuangan->jenis == 'pengeluaran' ? 'selected' : '' ?>>
+                                Pengeluaran
+                            </option>
+                        </select>
+                        <span class="form-text">Pilih jenis transaksi</span>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-weight"></i>
-                            Satuan
+                            <i class="fas fa-tags"></i>
+                            Kategori
                         </label>
                         <input type="text" 
-                               name="satuan" 
+                               name="kategori" 
                                class="form-control" 
-                               placeholder="butir / kg / liter"
-                               value="<?= htmlspecialchars($produksi->satuan ?? '') ?>"
+                               placeholder="Cth: Penjualan Ayam, Pakan, dll"
+                               value="<?= htmlspecialchars($keuangan->kategori) ?>"
                                required>
-                        <span class="form-text">Satuan produksi</span>
+                        <span class="form-text">Masukkan kategori transaksi</span>
                     </div>
+                </div>
+
+                <div class="form-group amount-input">
+                    <label class="form-label">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Jumlah
+                    </label>
+                    <div class="input-group">
+                        <span class="amount-prefix">Rp</span>
+                        <input type="text" 
+                               name="jumlah" 
+                               id="jumlah"
+                               class="form-control" 
+                               placeholder="0"
+                               value="<?= number_format($keuangan->jumlah, 0, ',', '.') ?>"
+                               required>
+                    </div>
+                    <span class="form-text">Masukkan jumlah transaksi dalam Rupiah</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-sticky-note"></i>
+                        Keterangan (Opsional)
+                    </label>
+                    <textarea name="keterangan" 
+                              class="form-control" 
+                              rows="3" 
+                              placeholder="Tambahkan keterangan tentang transaksi ini..."><?= htmlspecialchars($keuangan->keterangan ?? '') ?></textarea>
+                    <span class="form-text">Deskripsi tambahan tentang transaksi</span>
                 </div>
 
                 <!-- Form Helper -->
                 <div class="form-helper">
                     <h6><i class="fas fa-info-circle"></i>Informasi Penting</h6>
                     <p>
-                        • Pastikan data produksi diisi sesuai dengan hasil aktual.<br>
-                        • Satuan harus konsisten untuk memudahkan pelaporan.<br>
-                        • Periksa kembali jenis ayam sebelum menyimpan.
+                        • Pastikan data keuangan diperbarui dengan akurat.<br>
+                        • Kategori bisa diisi bebas sesuai kebutuhan.<br>
+                        • Perubahan data akan langsung mempengaruhi laporan keuangan.
                     </p>
                 </div>
 
                 <!-- Button Container -->
                 <div class="btn-container">
-                    <a href="<?= base_url('produksi') ?>" class="btn btn-back">
+                    <a href="<?= base_url('keuangan') ?>" class="btn btn-back">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                     <button type="submit" class="btn btn-save">
@@ -408,113 +426,120 @@
     <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('formEditProduksi');
+            const form = document.getElementById('formEditKeuangan');
             const submitBtn = form.querySelector('button[type="submit"]');
+            const jumlahInput = document.getElementById('jumlah');
             
-            // Set maximum date to today for tanggal_produksi
-            const today = new Date();
-            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-            const localDate = today.toISOString().split('T')[0];
-            
-            const dateInput = form.querySelector('input[name="tanggal_produksi"]');
-            if (dateInput && !dateInput.value) {
-                dateInput.setAttribute('max', localDate);
+            // Fungsi: Format angka jadi Rupiah (pakai titik)
+            function formatCurrency(input) {
+                // Hapus karakter selain angka
+                let value = input.value.replace(/[^\d]/g, '');
+                if (value) {
+                    // Tambahkan titik setiap 3 angka
+                    value = parseInt(value).toLocaleString('id-ID');
+                    input.value = value;
+                }
             }
             
-            // Form validation
+            // Fungsi: Kembalikan ke angka murni (hapus titik)
+            function parseCurrency(value) {
+                return parseInt(value.replace(/\./g, '')) || 0;
+            }
+            
+            // Event: Saat user mengetik atau meninggalkan kolom (Blur)
+            // Format ulang agar ada titiknya (supaya enak dibaca user)
+            jumlahInput.addEventListener('blur', function() {
+                formatCurrency(this);
+            });
+            
+            // Event: Saat user klik kolom untuk edit (Focus)
+            // Hapus titik sementara agar user mudah mengedit angka
+            jumlahInput.addEventListener('focus', function() {
+                this.value = this.value.replace(/\./g, '');
+            });
+            
+            // PENTING: Format otomatis saat halaman pertama kali dibuka
+            // Agar data dari database (misal: 1000000) langsung tampil sebagai 1.000.000
+            setTimeout(() => {
+                formatCurrency(jumlahInput);
+            }, 100);
+            
+            // Event: Saat Tombol Simpan ditekan
             form.addEventListener('submit', function(e) {
-                let isValid = true;
-                const inputs = form.querySelectorAll('input[required]');
+                // Cegah submit otomatis dulu untuk validasi & pembersihan data
+                e.preventDefault();
                 
-                // Reset validation styles
-                inputs.forEach(input => {
-                    input.classList.remove('is-invalid', 'is-valid');
+                let isValid = true;
+                const requiredInputs = [
+                    form.querySelector('input[name="tanggal_transaksi"]'),
+                    form.querySelector('select[name="jenis"]'),
+                    form.querySelector('input[name="kategori"]'),
+                    jumlahInput
+                ];
+                
+                // Reset validasi visual
+                requiredInputs.forEach(input => {
+                    input.classList.remove('is-invalid');
                 });
                 
-                // Validate required fields
-                inputs.forEach(input => {
+                // Cek field kosong
+                requiredInputs.forEach(input => {
                     if (!input.value.trim()) {
                         input.classList.add('is-invalid');
                         isValid = false;
-                    } else {
-                        input.classList.remove('is-invalid');
-                        input.classList.add('is-valid');
                     }
                 });
                 
-                // Validate tanggal tidak melebihi hari ini
-                const selectedDate = new Date(dateInput.value);
-                if (selectedDate > today) {
-                    dateInput.classList.add('is-invalid');
+                // Cek Validasi Angka (Harus > 0)
+                const jumlahValue = parseCurrency(jumlahInput.value);
+                if (jumlahValue <= 0) {
+                    jumlahInput.classList.add('is-invalid');
                     isValid = false;
-                    showToast('Tanggal produksi tidak boleh melebihi hari ini!', 'danger');
+                    showToast('Jumlah transaksi harus lebih dari 0!', 'danger');
                 }
-                
-                // Validate angka positif
-                const numberInputs = form.querySelectorAll('input[type="number"]');
-                numberInputs.forEach(input => {
-                    const value = parseInt(input.value) || 0;
-                    if (value < 0) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    }
-                });
                 
                 if (!isValid) {
-                    e.preventDefault();
                     showToast('Harap isi semua field dengan benar!', 'danger');
-                } else {
-                    // Show loading
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memperbarui...';
-                    submitBtn.disabled = true;
-                    
-                    // Simulasi pengiriman data (dalam implementasi nyata, hapus timeout ini)
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        showToast('Data produksi berhasil diperbarui!', 'success');
-                    }, 1500);
+                    return; // Stop di sini jika tidak valid
                 }
+
+                // --- PROSES SUBMIT ASLI ---
+                
+                // 1. Ubah tombol jadi loading
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+                submitBtn.disabled = true;
+
+                // 2. KUNCI UTAMA: Hapus semua titik pada input Jumlah sebelum dikirim
+                // Database butuh "1000000", bukan "1.000.000"
+                jumlahInput.value = parseCurrency(jumlahInput.value);
+                
+                // 3. Submit Form secara manual ke Controller
+                form.submit();
             });
         });
         
-        // Toast notification function
+        // Fungsi Toast (Pesan Notifikasi)
         function showToast(message, type = 'info') {
-            // Remove existing toasts
             const existingToasts = document.querySelectorAll('.toast');
             existingToasts.forEach(toast => toast.remove());
             
             const toast = document.createElement('div');
             toast.className = `toast align-items-center text-white bg-${type} border-0`;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'assertive');
-            toast.setAttribute('aria-atomic', 'true');
             toast.style.position = 'fixed';
             toast.style.top = '20px';
             toast.style.right = '20px';
             toast.style.zIndex = '9999';
             toast.style.minWidth = '250px';
-            
             toast.innerHTML = `
                 <div class="d-flex align-items-center p-3">
                     <div class="toast-body d-flex align-items-center">
-                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'} me-3 fs-5"></i>
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-3 fs-5"></i>
                         <span class="me-3">${message}</span>
                     </div>
-                    <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
                 </div>
             `;
-            
             document.body.appendChild(toast);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.remove();
-                }
-            }, 5000);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, 3000);
         }
     </script>
 </body>

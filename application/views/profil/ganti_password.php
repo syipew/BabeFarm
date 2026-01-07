@@ -50,6 +50,12 @@
         margin: 0;
     }
 
+    .form-header p {
+        color: #666;
+        font-size: 16px;
+        margin-top: 8px;
+    }
+
     .form-header::after {
         content: '';
         position: absolute;
@@ -98,6 +104,26 @@
         box-shadow: 0 0 0 3px rgba(16, 55, 92, 0.1);
         outline: none;
         background: white;
+    }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .password-toggle:hover {
+        color: var(--primary-color);
     }
 
     .form-text {
@@ -179,6 +205,21 @@
         line-height: 1.5;
     }
 
+    /* Password strength indicator */
+    .password-strength {
+        margin-top: 5px;
+        height: 4px;
+        border-radius: 2px;
+        background: #e0e6ef;
+        overflow: hidden;
+    }
+
+    .password-strength-fill {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
     /* Animations */
     @keyframes fadeIn {
         from {
@@ -221,70 +262,62 @@
     <div class="form-card">
         <!-- Form Header -->
         <div class="form-header">
-            <h2>Edit Data Profil</h2>
+            <h2>Ganti Password</h2>
+            <p>Buat password baru untuk akun Anda</p>
         </div>
 
         <!-- Form -->
-        <form action="<?= base_url('profil/update') ?>" method="post" id="formEditProfil">
+        <form action="<?= base_url('profil/update_password') ?>" method="post" id="formGantiPassword">
             <div class="form-group">
                 <label class="form-label">
-                    <i class="fas fa-user"></i>
-                    Nama Lengkap
+                    <i class="fas fa-lock"></i>
+                    Password Baru
                 </label>
-                <input type="text" 
-                       name="nama_lengkap" 
-                       class="form-control" 
-                       value="<?= htmlspecialchars($profil->nama_lengkap) ?>" 
-                       required>
-                <span class="form-text">Masukkan nama lengkap Anda</span>
+                <div class="password-wrapper">
+                    <input type="password" 
+                           name="password_baru" 
+                           id="passwordBaru"
+                           class="form-control" 
+                           placeholder="Masukkan password baru"
+                           required
+                           minlength="6">
+                    <button type="button" class="password-toggle" id="togglePasswordBaru">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength">
+                    <div class="password-strength-fill" id="passwordStrength"></div>
+                </div>
+                <span class="form-text">Minimal 6 karakter dengan kombinasi huruf dan angka</span>
             </div>
 
             <div class="form-group">
                 <label class="form-label">
-                    <i class="fas fa-user-tag"></i>
-                    Username
+                    <i class="fas fa-lock"></i>
+                    Konfirmasi Password
                 </label>
-                <input type="text" 
-                       name="username" 
-                       class="form-control" 
-                       value="<?= htmlspecialchars($profil->username) ?>" 
-                       required>
-                <span class="form-text">Username untuk login ke sistem</span>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-envelope"></i>
-                    Email
-                </label>
-                <input type="email" 
-                       name="email" 
-                       class="form-control" 
-                       value="<?= htmlspecialchars($profil->email) ?>" 
-                       required>
-                <span class="form-text">Alamat email aktif</span>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-phone"></i>
-                    Nomor Telepon
-                </label>
-                <input type="text" 
-                       name="nomor_telepon" 
-                       class="form-control" 
-                       value="<?= htmlspecialchars($profil->nomor_telepon) ?>" 
-                       required>
-                <span class="form-text">Nomor telepon yang dapat dihubungi</span>
+                <div class="password-wrapper">
+                    <input type="password" 
+                           name="konfirmasi" 
+                           id="konfirmasiPassword"
+                           class="form-control" 
+                           placeholder="Konfirmasi password baru"
+                           required
+                           minlength="6">
+                    <button type="button" class="password-toggle" id="toggleKonfirmasi">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="form-text">Masukkan kembali password baru untuk konfirmasi</span>
             </div>
 
             <!-- Form Helper -->
             <div class="form-helper">
-                <h6><i class="fas fa-info-circle"></i>Informasi Penting</h6>
+                <h6><i class="fas fa-lightbulb"></i>Tips Keamanan Password</h6>
                 <p>
-                    • Pastikan data yang dimasukkan akurat dan valid.<br>
-                    • Username tidak dapat diganti jika sudah digunakan.<br>
-                    • Email harus aktif untuk keperluan verifikasi.
+                    • Gunakan kombinasi huruf besar, kecil, angka, dan simbol.<br>
+                    • Jangan gunakan informasi pribadi seperti nama atau tanggal lahir.<br>
+                    • Pastikan password minimal 6 karakter untuk keamanan optimal.
                 </p>
             </div>
 
@@ -294,7 +327,7 @@
                     <i class="fas fa-arrow-left"></i> Kembali
                 </a>
                 <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-save"></i> Simpan Perubahan
+                    <i class="fas fa-key"></i> Ganti Password
                 </button>
             </div>
         </form>
@@ -303,8 +336,92 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('formEditProfil');
+        const form = document.getElementById('formGantiPassword');
         const submitBtn = form.querySelector('button[type="submit"]');
+        const passwordBaruInput = document.getElementById('passwordBaru');
+        const konfirmasiPasswordInput = document.getElementById('konfirmasiPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const togglePasswordBaru = document.getElementById('togglePasswordBaru');
+        const toggleKonfirmasi = document.getElementById('toggleKonfirmasi');
+        
+        // Toggle password visibility
+        function setupPasswordToggle(toggleBtn, inputField) {
+            toggleBtn.addEventListener('click', function() {
+                const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputField.setAttribute('type', type);
+                
+                // Toggle eye icon
+                const eyeIcon = this.querySelector('i');
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+        
+        setupPasswordToggle(togglePasswordBaru, passwordBaruInput);
+        setupPasswordToggle(toggleKonfirmasi, konfirmasiPasswordInput);
+        
+        // Password strength indicator
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 6) strength += 20;
+            if (password.length >= 8) strength += 20;
+            
+            // Character variety
+            if (/[a-z]/.test(password)) strength += 20;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 20;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+            
+            // Cap at 100
+            strength = Math.min(strength, 100);
+            
+            // Update visual indicator
+            passwordStrength.style.width = strength + '%';
+            
+            // Update color based on strength
+            if (strength < 40) {
+                passwordStrength.style.backgroundColor = '#dc3545'; // Red
+            } else if (strength < 70) {
+                passwordStrength.style.backgroundColor = '#fd7e14'; // Orange
+            } else {
+                passwordStrength.style.backgroundColor = '#28a745'; // Green
+            }
+        }
+        
+        // Check password strength on input
+        passwordBaruInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            
+            // Clear konfirmasi if password changes
+            if (konfirmasiPasswordInput.value) {
+                konfirmasiPasswordInput.classList.remove('is-valid', 'is-invalid');
+            }
+        });
+        
+        // Real-time confirmation check
+        konfirmasiPasswordInput.addEventListener('input', function() {
+            const password = passwordBaruInput.value;
+            const konfirmasi = this.value;
+            
+            if (konfirmasi && password) {
+                if (konfirmasi === password) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                    this.classList.add('is-invalid');
+                }
+            } else {
+                this.classList.remove('is-valid', 'is-invalid');
+            }
+        });
         
         // Form validation
         form.addEventListener('submit', function(e) {
@@ -324,13 +441,17 @@
                 }
             });
             
-            // Validate email format
-            const emailInput = form.querySelector('input[type="email"]');
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (emailInput.value && !emailRegex.test(emailInput.value)) {
-                emailInput.classList.add('is-invalid');
+            // Validate password length
+            if (passwordBaruInput.value.length < 6) {
+                passwordBaruInput.classList.add('is-invalid');
                 isValid = false;
-                showToast('Format email tidak valid!', 'error');
+            }
+            
+            // Validate password match
+            if (passwordBaruInput.value !== konfirmasiPasswordInput.value) {
+                konfirmasiPasswordInput.classList.add('is-invalid');
+                isValid = false;
+                showToast('Password dan konfirmasi password tidak cocok!', 'error');
             }
             
             if (!isValid) {
@@ -339,27 +460,20 @@
             } else {
                 // Show loading
                 const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengganti...';
                 submitBtn.disabled = true;
                 
                 // Simulate form submission
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                    showToast('Data profil berhasil diperbarui!', 'success');
+                    showToast('Password berhasil diganti!', 'success');
                 }, 1500);
             }
         });
         
-        // Real-time validation
-        const inputs = form.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.classList.remove('is-invalid');
-                }
-            });
-        });
+        // Initial password strength check
+        checkPasswordStrength(passwordBaruInput.value);
     });
     
     // Toast notification function

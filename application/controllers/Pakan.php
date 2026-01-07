@@ -44,7 +44,6 @@ public function tambah() {
     }
 
     // tampilan form
-    $this->load->view('header');
     $this->load->view('pakan/tambah');
 }
 
@@ -65,19 +64,39 @@ public function edit($id) {
     }
 
     $data['pakan'] = $this->Pakan_model->get_by_id($id);
-    $this->load->view('header');
     $this->load->view('pakan/edit', $data);
 }
+
+    public function update()
+    {
+        $id = $this->input->post('id_pakan'); // Ambil ID dari hidden input
+        
+        $data = [
+            'nama_pakan' => $this->input->post('nama_pakan'),
+            'stok_awal'  => $this->input->post('stok_awal'),
+            'stok_sisa'  => $this->input->post('stok_sisa'),
+            'satuan'     => $this->input->post('satuan')
+        ];
+
+        $this->Pakan_model->update($id, $data);
+        
+        $this->session->set_flashdata('alert', [
+            'type' => 'edit',
+            'message' => 'Data pakan berhasil diubah'
+        ]);
+        
+        redirect('pakan');
+    }
 
 public function hapus($id)
 {
     if (!$this->input->post('hapus')) {
-        show_404();
+        show_404(); 
     }
 
     $this->Pakan_model->delete($id);
 
-    $$this->session->set_flashdata('alert', [
+    $this->session->set_flashdata('alert', [
         'type' => 'hapus',
         'message' => 'Data pakan berhasil dihapus'
     ]);

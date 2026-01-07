@@ -59,3 +59,7 @@ $route['ayam'] = 'ayam';
 $route['pakan'] = 'pakan';
 $route['kesehatan'] = 'kesehatan';
 
+$route['laporan'] = 'laporan/index';
+$route['laporan/cetak'] = 'laporan/cetak';
+$route['laporan/export_excel'] = 'laporan/export_excel';
+$route['laporan/refresh_data'] = 'laporan/refresh_data';
