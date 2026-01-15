@@ -292,8 +292,9 @@
             </div>
 
             <!-- Form -->
-            <form action="<?= base_url('ayam/update/' . $ayam->id_kandang) ?>" method="post">                
+            <form action="<?= base_url('ayam/update/' . $ayam->id_kandang) ?>" method="post" id="formEditAyam">                 
                 <input type="hidden" name="id_kandang" value="<?= $ayam->id_kandang ?>">                
+                
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">
@@ -302,16 +303,22 @@
                         </label>
                         <div class="input-group">
                             <input type="text" 
-                                   name="jenis_ayam" 
-                                   class="form-control" 
-                                   placeholder="Cth: Ayam Petelur, Ayam Broiler"
-                                   value="<?= htmlspecialchars($ayam->jenis_ayam ?? '') ?>"
-                                   required>
+                                name="jenis_ayam" 
+                                list="list_ayam"
+                                class="form-control" 
+                                placeholder="Cth: Ayam Petelur, Ayam Broiler"
+                                value="<?= htmlspecialchars($ayam->jenis_ayam ?? '') ?>"
+                                required>
+                            <datalist id="list_ayam">
+                                <?php foreach($semua_ayam as $row): ?>
+                                    <option value="<?= $row->jenis_ayam ?>">
+                                <?php endforeach; ?>
+                            </datalist>
                             <span class="input-icon">
-                                <i class="fas fa-question-circle"></i>
+                                <i class="fas fa-search"></i>
                             </span>
                         </div>
-                        <div class="form-text">Masukkan jenis ayam yang akan diperbarui</div>
+                        <div class="form-text">Ubah jenis ayam jika terjadi kesalahan input sebelumnya.</div>
                     </div>
 
                     <div class="form-group">
@@ -490,17 +497,9 @@
                 } else {
                     // Show loading
                     const submitBtn = form.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memperbarui...';
                     submitBtn.disabled = true;
-                    
-                    // In real application, form would be submitted normally
-                    // This is just for demo
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        showToast('Data berhasil diperbarui!', 'success');
-                    }, 1500);
+
                 }
             });
             

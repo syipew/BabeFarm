@@ -40,7 +40,7 @@
 
         .header-actions {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
             padding: 15px 20px;
@@ -62,8 +62,8 @@
         .btn-tambah:hover {
             background: linear-gradient(to right, #0d2f4f, #163f66);
             color: #ffffff;
+            transform: translateY(-2px);
         }
-
 
         .info-box {
             background-color: #f8f9fa;
@@ -72,6 +72,43 @@
             border-left: 4px solid #10375C;
             font-weight: 500;
             color: #495057;
+        }
+
+        .saldo-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .saldo-item {
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .saldo-total {
+            background-color: rgba(16, 55, 92, 0.1);
+            color: #10375C;
+            border: 1px solid rgba(16, 55, 92, 0.3);
+        }
+
+        .saldo-hidup {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .saldo-mati {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .saldo-kandang {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: #17a2b8;
+            border: 1px solid rgba(23, 162, 184, 0.3);
         }
 
         .table-responsive-custom {
@@ -181,7 +218,6 @@
             color: #fff;
         }
 
-
         .no-data {
             text-align: center;
             padding: 40px;
@@ -189,12 +225,21 @@
             font-style: italic;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             .data-ayam-container {
                 padding: 15px;
             }
-
+            
+            .header-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .saldo-info {
+                flex-direction: column;
+                gap: 8px;
+            }
             
             .tabel-ayam thead th,
             .tabel-ayam tbody td {
@@ -217,29 +262,71 @@
     <div class="data-ayam-container">
         <h4 class="text-center judul-ayam">Data Ayam</h4>
 
-        <div class="header-actions">   
-            <div>
+        <div class="header-actions">
+            <div class="info-box">
+                <?php 
+                $total_ayam = 0;
+                $total_ayam_mati = 0;
+                $total_ayam_hidup = 0;
+                $jumlah_kandang = 0;
+                
+                if(!empty($ayam)) {
+                    foreach($ayam as $a) {
+                        $total_ayam += $a->jumlah_tambah;
+                        $total_ayam_mati += $a->jumlah_mati;
+                        $total_ayam_hidup += $a->jumlah_ayam;
+                        $jumlah_kandang++;
+                    }
+                }
+                ?>
+                <div class="saldo-info mt-2">
+                    <span class="saldo-item saldo-total">Total Masuk: <?= number_format($total_ayam, 0, ',', '.') ?></span>
+                    <span class="saldo-item saldo-hidup">Stok Hidup: <?= number_format($total_ayam_hidup, 0, ',', '.') ?></span>
+                    <span class="saldo-item saldo-mati">Total Mati: <?= number_format($total_ayam_mati, 0, ',', '.') ?></span>
+                    <span class="saldo-item saldo-kandang">Baris Data: <?= $jumlah_kandang ?></span>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <form action="<?= base_url('ayam') ?>" method="get" class="d-flex gap-1">
+                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari jenis ayam..." value="<?= isset($keyword) ? $keyword : '' ?>" style="width: 200px; border-radius: 8px;">
+                    <button type="submit" class="btn btn-info btn-sm text-white"><i class="fas fa-search"></i></button>
+                    <?php if(isset($keyword)): ?>
+                        <a href="<?= base_url('ayam') ?>" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i></a>
+                    <?php endif; ?>
+                </form>
                 <a href="<?= base_url('ayam/tambah') ?>" class="btn btn-primary btn-tambah">
-                    <i class="fas fa-plus-circle me-2"></i>  Tambah Data
+                    <i class="fas fa-plus-circle me-2"></i> Tambah Data
                 </a>
             </div>
         </div>
 
-        <?php if (!empty($alert)): ?>
-        <script>
-        window.addEventListener('load', function () {
-            let icon = 'success';
-            let title = 'Berhasil';
-            Swal.fire({
-                icon: icon,
-                title: title,
-                text: <?= json_encode($alert['message']) ?>,
-                timer: 2000,
-                showConfirmButton: false
-            });
-        });
-        </script>
+        <?php if (isset($keyword) && $keyword != '' && isset($ringkasan)): ?>
+        <div class="alert shadow-sm border-0 mb-4" style="background: white; border-radius: 12px; border-left: 5px solid #10375C !important;">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1" style="color: #10375C;">Ringkasan Populasi: <strong>"<?= $keyword ?>"</strong></h5>
+                    <p class="text-muted small mb-0">Menampilkan akumulasi dari semua batch/umur untuk jenis ini.</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-inline-block text-center px-3 border-end">
+                        <small class="text-muted d-block">Total Masuk</small>
+                        <strong class="text-dark"><?= number_format($ringkasan->total_tambah) ?></strong>
+                    </div>
+                    <div class="d-inline-block text-center px-3 border-end">
+                        <small class="text-muted d-block text-danger">Mati</small>
+                        <strong class="text-danger"><?= number_format($ringkasan->total_mati) ?></strong>
+                    </div>
+                    <div class="d-inline-block text-center px-3">
+                        <small class="text-muted d-block text-success">Total Stok</small>
+                        <strong class="text-success" style="font-size: 1.2rem;"><?= number_format($ringkasan->total_stok) ?></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php endif; ?>
+
+    
 
         <div class="table-responsive-custom">
             <table class="table table-bordered tabel-ayam">
@@ -266,16 +353,18 @@
                             <td>
                                 <span class="badge-tanggal"><?= date('d F Y', strtotime($a->tanggal_masuk)) ?></span>
                             </td>
-                            <td><?= $a->jumlah_tambah ?></td>
+                            <td><?= number_format($a->jumlah_tambah, 0, ',', '.') ?></td>
                             <td><?= $a->umur_awal ?> bulan</td>
                             <td>
                                 <?php if($a->jumlah_mati > 0): ?>
-                                    <span class="text-danger fw-bold"><?= $a->jumlah_mati ?></span>
+                                    <span class="text-danger fw-bold"><?= number_format($a->jumlah_mati, 0, ',', '.') ?></span>
                                 <?php else: ?>
                                     <span class="text-success"><?= $a->jumlah_mati ?></span>
                                 <?php endif; ?>
                             </td>
-                            <td class="jumlah-ayam-cell"><?= $a->jumlah_ayam ?></td>
+                            <td class="jumlah-ayam-cell fw-bold" style="color: #10375C;">
+                                <?= number_format($a->jumlah_ayam, 0, ',', '.') ?>
+                            </td>
                             <td>
                                 <div class="btn-aksi">
                                     <a href="<?= base_url('ayam/edit/'.$a->id_kandang) ?>" class="btn btn-warning btn-sm">
@@ -285,10 +374,8 @@
                                         method="post" 
                                         style="display:inline;"
                                         onsubmit="return confirm('Yakin mau menghapus data ayam ini?')">
-
                                         <input type="hidden" name="hapus" value="1">
-
-                                        <button type="submit" class="btn btn-danger btn-sm">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="konfirmasiHapus('<?= $a->id_kandang ?>')">
                                             <i class="fas fa-trash me-1"></i>Hapus
                                         </button>
                                     </form>
@@ -307,10 +394,65 @@
                 </tbody>
             </table>
         </div>
-        
-        
     </div>
 </div>
+<!-- Debug: Tampilkan flashdata -->
+<?php if($this->session->flashdata()): ?>
+<script>
+console.log("Flashdata tersedia:");
+console.log(<?= json_encode($this->session->flashdata()) ?>);
+</script>
+<?php endif; ?>
 
-<!-- Tambahkan Font Awesome untuk ikon -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+$(document).ready(function() {
+    // Periksa semua kemungkinan flashdata
+    <?php if($this->session->flashdata('sukses')): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '<?= str_replace("'", "\\'", $this->session->flashdata('sukses')) ?>',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        });
+    <?php elseif($this->session->flashdata('error')): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '<?= str_replace("'", "\\'", $this->session->flashdata('error')) ?>',
+            confirmButtonColor: '#10375C'
+        });
+    <?php elseif($this->session->flashdata('pesan')): ?>
+        Swal.fire({
+            icon: '<?= $this->session->flashdata('status') ?>',
+            title: '<?= $this->session->flashdata('status') == 'success' ? 'Berhasil!' : 'Gagal!' ?>',
+            text: '<?= str_replace("'", "\\'", $this->session->flashdata('pesan')) ?>',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    <?php endif; ?>
+});
+
+function konfirmasiHapus(id) {
+    Swal.fire({
+        title: 'Yakin mau hapus?',
+        text: "Data yang dihapus tidak bisa dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#10375C',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "<?= base_url('ayam/hapus/') ?>" + id;
+        }
+    });
+}
+</script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

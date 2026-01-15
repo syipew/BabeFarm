@@ -296,22 +296,28 @@
             <!-- Form -->
             <form action="<?= site_url('ayam/simpan') ?>" method="post" id="formTambahAyam">
                 <div class="form-row">
-                    <div class="form-group">
+                   <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-kiwi-bird"></i>
                             Jenis Ayam
                         </label>
                         <div class="input-group">
                             <input type="text" 
-                                   name="jenis_ayam" 
-                                   class="form-control" 
-                                   placeholder="Cth: Ayam Petelur, Ayam Broiler"
-                                   required>
+                                name="jenis_ayam" 
+                                list="list_ayam" 
+                                class="form-control" 
+                                placeholder="Pilih atau ketik jenis baru..."
+                                required>
+                            <datalist id="list_ayam">
+                                <?php foreach($semua_ayam as $row): ?>
+                                    <option value="<?= $row->jenis_ayam ?>">
+                                <?php endforeach; ?>
+                            </datalist>
                             <span class="input-icon">
-                                <i class="fas fa-question-circle"></i>
+                                <i class="fas fa-search"></i>
                             </span>
                         </div>
-                        <div class="form-text">Masukkan jenis ayam yang akan ditambahkan</div>
+                        <div class="form-text">Pilih jenis dari daftar atau ketik baru jika belum ada.</div>
                     </div>
 
                     <div class="form-group">
@@ -427,6 +433,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
         // Auto-calculate jumlah ayam
@@ -486,17 +493,9 @@
                 } else {
                     // Show loading
                     const submitBtn = form.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
                     submitBtn.disabled = true;
-                    
-                    // In real application, form would be submitted normally
-                    // This is just for demo
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        showToast('Data berhasil disimpan!', 'success');
-                    }, 1500);
+
                 }
             });
         });
@@ -541,3 +540,4 @@
         document.querySelector('input[name="tanggal_masuk"]').setAttribute('max', localDate);
 
     </script>
+    

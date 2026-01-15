@@ -301,15 +301,22 @@
                         </label>
                         <div class="input-group">
                             <input type="text" 
-                                   name="nama_pakan" 
-                                   class="form-control" 
-                                   placeholder="Cth: Pakan Grower"
-                                   required>
+                                name="nama_pakan" 
+                                id="nama_pakan"
+                                class="form-control" 
+                                placeholder="Cth: Pakan Grower"
+                                list="listPakan"
+                                required>
+                            <datalist id="listPakan">
+                                <?php foreach($semua_pakan as $p): ?>
+                                    <option value="<?= $p->nama_pakan ?>">
+                                <?php endforeach; ?>
+                            </datalist>
                             <span class="input-icon">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-search"></i>
                             </span>
                         </div>
-                        <div class="form-text">Masukkan nama pakan yang akan ditambahkan</div>
+                        <div class="form-text">Pilih dari daftar atau ketik nama pakan baru</div>
                     </div>
 
                     <div class="form-group">
@@ -345,7 +352,7 @@
                                    placeholder="0"
                                    min="0"
                                    required>
-                            <span class="input-icon">unit</span>
+                            <span class="input-icon">Kg</span>
                         </div>
                         <div class="form-text">Stok awal pakan saat ditambahkan</div>
                     </div>
@@ -363,7 +370,7 @@
                                    placeholder="0"
                                    min="0"
                                    required>
-                            <span class="input-icon">unit</span>
+                            <span class="input-icon">Kg</span>
                         </div>
                         <div class="form-text">Stok sisa pakan saat ini</div>
                     </div>
@@ -398,82 +405,44 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('formTambahPakan');
-            const stokAwalInput = document.getElementById('stok_awal');
-            const stokSisaInput = document.getElementById('stok_sisa');
-            const submitBtn = form.querySelector('button[type="submit"]');
-            
-            // Validasi stok sisa tidak boleh lebih besar dari stok awal
-            function validateStok() {
-                const stokAwal = parseInt(stokAwalInput.value) || 0;
-                const stokSisa = parseInt(stokSisaInput.value) || 0;
-                
-                if (stokSisa > stokAwal) {
-                    stokSisaInput.classList.add('is-invalid');
-                    stokSisaInput.classList.remove('is-valid');
-                    return false;
-                } else {
-                    stokSisaInput.classList.remove('is-invalid');
-                    stokSisaInput.classList.add('is-valid');
-                    return true;
-                }
-            }
-            
-            // Event listeners untuk validasi real-time
-            stokAwalInput.addEventListener('input', validateStok);
-            stokSisaInput.addEventListener('input', validateStok);
-            
-            // Form validation
-            form.addEventListener('submit', function(e) {
-                let isValid = true;
-                const inputs = form.querySelectorAll('input[required]');
-                
-                // Reset semua validasi
-                inputs.forEach(input => {
-                    input.classList.remove('is-invalid', 'is-valid');
-                });
-                
-                // Validasi field wajib
-                inputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        input.classList.add('is-valid');
-                    }
-                });
-                
-                // Validasi khusus stok
-                if (!validateStok()) {
-                    isValid = false;
-                    showToast('Stok sisa tidak boleh lebih besar dari stok awal!', 'danger');
-                }
-                
-                // Validasi angka positif
-                const numberInputs = form.querySelectorAll('input[type="number"]');
-                numberInputs.forEach(input => {
-                    const value = parseInt(input.value) || 0;
-                    if (value < 0) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    }
-                });
-                
-                if (!isValid) {
-                    e.preventDefault();
-                    showToast('Harap isi semua field dengan benar!', 'danger');
-                } else {
-                    // Show loading
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-                    submitBtn.disabled = true;
+            const pakanEksis = [
+                <?php foreach($semua_pakan as $p): ?>
+                    { nama: "<?= strtolower($p->nama_pakan) ?>", satuan: "<?= $p->satuan ?>" },
+                <?php endforeach; ?>
+            ];
+
+            const inputNama = document.querySelector('input[name="nama_pakan"]');
+            const inputStok = document.querySelector('input[name="stok_awal"]');
+            const inputSisa = document.querySelector('input[name="stok_sisa"]');
+            const inputSatuan = document.querySelector('input[name="satuan"]');
+            const labelStok = document.querySelector('label[for="stok_awal"]');
+            const btnSubmit = document.querySelector('button[type="submit"]');
+
+            inputNama.addEventListener('input', function() {
+                const val = this.value.trim().toLowerCase();
+                const ditemukan = pakanEksis.find(p => p.nama === val);
+
+                if (ditemukan) {
+                    // MODE TAMBAH STOK (AKUMULASI)
+                    labelStok.innerHTML = '<i class="fas fa-plus"></i> Jumlah Stok Masuk Baru';
+                    inputSatuan.value = ditemukan.satuan;
+                    inputSatuan.readOnly = true; // Kunci satuan agar konsisten
                     
-                    // Simulasi delay untuk demo (dalam implementasi nyata, hapus timeout ini)
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        showToast('Data berhasil disimpan!', 'success');
-                    }, 1500);
+                    // Sembunyikan input stok sisa karena otomatis dihitung sistem
+                    inputSisa.value = "Otomatis";
+                    inputSisa.parentElement.parentElement.style.display = 'none';
+                    
+                    btnSubmit.innerHTML = '<i class="fas fa-plus-circle"></i> Update Stok';
+                    btnSubmit.className = 'btn btn-primary'; 
+                } else {
+                    // MODE PAKAN BARU
+                    labelStok.innerHTML = '<i class="fas fa-boxes"></i> Stok Awal';
+                    inputSatuan.readOnly = false;
+                    inputSisa.parentElement.parentElement.style.display = 'block';
+                    inputSisa.value = "";
+                    
+                    btnSubmit.innerHTML = '<i class="fas fa-save"></i> Simpan Pakan Baru';
+                    btnSubmit.className = 'btn btn-save';
                 }
             });
             

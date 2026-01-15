@@ -401,10 +401,22 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('formEditPakan');
-            const stokAwalInput = document.getElementById('stok_awal');
-            const stokSisaInput = document.getElementById('stok_sisa');
-            
+            const stokAwal = document.getElementById('stok_awal');
+            const stokSisa = document.getElementById('stok_sisa');
+
+            function validasi() {
+                // Pada EDIT, stok sisa tidak boleh lebih dari stok awal (logika audit)
+                if (parseInt(stokSisa.value) > parseInt(stokAwal.value)) {
+                    stokSisa.setCustomValidity('Stok sisa tidak mungkin melebihi total stok awal (riwayat).');
+                } else {
+                    stokSisa.setCustomValidity('');
+                }
+            }
+
+            stokAwal.addEventListener('input', validasi);
+            stokSisa.addEventListener('input', validasi);
+        });
+                        
             // Validasi stok sisa tidak boleh lebih besar dari stok awal
             function validateStok() {
                 const stokAwal = parseInt(stokAwalInput.value) || 0;
