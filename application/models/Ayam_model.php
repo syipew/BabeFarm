@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         public function get_all()
         {
+            $this->db->order_by('tanggal_masuk', 'DESC'); 
             return $this->db->get('kandang')->result();
         }
 

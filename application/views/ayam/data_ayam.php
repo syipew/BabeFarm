@@ -287,9 +287,9 @@
                 </div>
             </div>
             
-            <div class="d-flex gap-2 align-items-center flex-wrap">
+            <div class="d-flex gap-4 align-items-center flex-wrap">
                 <form action="<?= base_url('ayam') ?>" method="get" class="d-flex gap-1">
-                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari jenis ayam..." value="<?= isset($keyword) ? $keyword : '' ?>" style="width: 200px; border-radius: 8px;">
+                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari jenis ayam..." value="<?= isset($keyword) ? $keyword : '' ?>" style="width: 200px; height: 30px; margin-bottom: 10px; border-radius: 8px;">
                     <button type="submit" class="btn btn-info btn-sm text-white"><i class="fas fa-search"></i></button>
                     <?php if(isset($keyword)): ?>
                         <a href="<?= base_url('ayam') ?>" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i></a>

@@ -6,6 +6,8 @@ class Pakan_model extends CI_Model {
     private $table = 'pakan';
 
     public function get_all() {
+        $this->db->order_by('stok_sisa', 'ASC');
+        $this->db->order_by('id_pakan', 'DESC');
         return $this->db->get($this->table)->result();
     }
 

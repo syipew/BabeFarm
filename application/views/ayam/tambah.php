@@ -372,23 +372,8 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-skull-crossbones"></i>
-                            Jumlah Mati
-                        </label>
-                        <div class="input-group">
-                            <input type="number" 
-                                   name="jumlah_mati" 
-                                   class="form-control" 
-                                   placeholder="0"
-                                   min="0"
-                                   value="0">
-                            <span class="input-icon">ekor</span>
-                        </div>
-                        <div class="form-text">Jumlah ayam yang mati (jika ada)</div>
-                    </div>
+
+                    <input type="hidden" name="jumlah_mati" value="0">
 
                     <div class="form-group">
                         <label class="form-label">
@@ -404,10 +389,9 @@
                                    required>
                             <span class="input-icon">ekor</span>
                         </div>
-                        <div class="form-text">Otomatis terhitung: Jumlah Tambah - Jumlah Mati</div>
+                        <div class="form-text">Otomatis mengambil data dari Jumlah Tambah</div>
                     </div>
-                </div>
-
+        
                 <!-- Form Helper -->
                 <div class="form-helper">
                     <h6><i class="fas fa-lightbulb"></i>Tips Pengisian</h6>
@@ -437,32 +421,33 @@
     
     <script>
         // Auto-calculate jumlah ayam
-        document.addEventListener('DOMContentLoaded', function() {
-            const jumlahTambah = document.querySelector('input[name="jumlah_tambah"]');
-            const jumlahMati = document.querySelector('input[name="jumlah_mati"]');
-            const jumlahAyam = document.querySelector('input[name="jumlah_ayam"]');
-            
-            function calculateTotal() {
-                const tambah = parseInt(jumlahTambah.value) || 0;
-                const mati = parseInt(jumlahMati.value) || 0;
-                const total = tambah - mati;
+            document.addEventListener('DOMContentLoaded', function() {
+                const jumlahTambah = document.querySelector('input[name="jumlah_tambah"]');
+                const jumlahMati = document.querySelector('input[name="jumlah_mati"]');
+                const jumlahAyam = document.querySelector('input[name="jumlah_ayam"]');
                 
-                if (total < 0) {
-                    jumlahAyam.value = 0;
-                    jumlahAyam.classList.add('is-invalid');
-                    jumlahAyam.classList.remove('is-valid');
-                } else {
+                function calculateTotal() {
+                    // Karena data mati di-hide dan default 0
+                    const tambah = parseInt(jumlahTambah.value) || 0;
+                    const mati = 0; // Memastikan mati selalu dianggap 0 untuk input baru
+                    
+                    const total = tambah - mati;
+                    
                     jumlahAyam.value = total;
-                    jumlahAyam.classList.add('is-valid');
-                    jumlahAyam.classList.remove('is-invalid');
+                    
+                    // Memberi feedback visual jika sudah diisi
+                    if (total > 0) {
+                        jumlahAyam.classList.add('is-valid');
+                    } else {
+                        jumlahAyam.classList.remove('is-valid');
+                    }
                 }
-            }
-            
-            jumlahTambah.addEventListener('input', calculateTotal);
-            jumlahMati.addEventListener('input', calculateTotal);
-            
-            // Initial calculation
-            calculateTotal();
+                
+                jumlahTambah.addEventListener('input', calculateTotal);
+                
+                // Panggil saat awal load
+                calculateTotal();
+            });
             
             // Form validation
             const form = document.getElementById('formTambahAyam');

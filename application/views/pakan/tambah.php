@@ -338,50 +338,33 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+    
                     <div class="form-group">
-                        <label class="form-label">
+                        <label class="form-label" for="stok_awal">
                             <i class="fas fa-boxes"></i>
-                            Stok Awal
+                            Stok Tambah
                         </label>
                         <div class="input-group">
                             <input type="number" 
-                                   name="stok_awal" 
-                                   id="stok_awal"
-                                   class="form-control" 
-                                   placeholder="0"
-                                   min="0"
-                                   required>
+                                name="stok_awal" 
+                                id="stok_awal"
+                                class="form-control" 
+                                placeholder="0"
+                                min="0"
+                                required>
                             <span class="input-icon">Kg</span>
                         </div>
-                        <div class="form-text">Stok awal pakan saat ditambahkan</div>
+                        <div class="form-text">Jumlah pakan yang baru masuk</div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-box"></i>
-                            Stok Sisa
-                        </label>
-                        <div class="input-group">
-                            <input type="number" 
-                                   name="stok_sisa" 
-                                   id="stok_sisa"
-                                   class="form-control" 
-                                   placeholder="0"
-                                   min="0"
-                                   required>
-                            <span class="input-icon">Kg</span>
-                        </div>
-                        <div class="form-text">Stok sisa pakan saat ini</div>
-                    </div>
-                </div>
+                    <input type="hidden" name="stok_sisa" id="stok_sisa">
+            
 
                 <!-- Form Helper -->
                 <div class="form-helper">
                     <h6><i class="fas fa-lightbulb"></i>Tips Pengisian</h6>
                     <p>
                         • Pastikan data yang dimasukkan sudah sesuai dengan kondisi pakan yang sebenarnya.<br>
-                        • Stok sisa tidak boleh lebih besar dari stok awal.<br>
                         • Satuan harus konsisten untuk memudahkan pelaporan.<br>
                         • Data yang sudah disimpan dapat diedit melalui menu edit.
                     </p>
@@ -418,18 +401,28 @@
             const labelStok = document.querySelector('label[for="stok_awal"]');
             const btnSubmit = document.querySelector('button[type="submit"]');
 
+            // --- BAGIAN BARU: SINKRONISASI OTOMATIS ---
+            inputStok.addEventListener('input', function() {
+                // Jika pakan baru (inputSisa masih terlihat/bukan mode "Otomatis")
+                // Maka isi stok_sisa sama persis dengan stok_awal
+                if (inputSisa.parentElement.parentElement.style.display !== 'none') {
+                    inputSisa.value = this.value;
+                }
+            });
+            // ------------------------------------------
+
             inputNama.addEventListener('input', function() {
                 const val = this.value.trim().toLowerCase();
                 const ditemukan = pakanEksis.find(p => p.nama === val);
 
                 if (ditemukan) {
-                    // MODE TAMBAH STOK (AKUMULASI)
+                    // MODE TAMBAH STOK (Untuk pakan yang sudah ada di database)
                     labelStok.innerHTML = '<i class="fas fa-plus"></i> Jumlah Stok Masuk Baru';
                     inputSatuan.value = ditemukan.satuan;
-                    inputSatuan.readOnly = true; // Kunci satuan agar konsisten
+                    inputSatuan.readOnly = true; 
                     
-                    // Sembunyikan input stok sisa karena otomatis dihitung sistem
-                    inputSisa.value = "Otomatis";
+                    // Kita set value "Otomatis" agar Controller tahu ini mode penambahan
+                    inputSisa.value = "Otomatis"; 
                     inputSisa.parentElement.parentElement.style.display = 'none';
                     
                     btnSubmit.innerHTML = '<i class="fas fa-plus-circle"></i> Update Stok';
@@ -438,13 +431,28 @@
                     // MODE PAKAN BARU
                     labelStok.innerHTML = '<i class="fas fa-boxes"></i> Stok Awal';
                     inputSatuan.readOnly = false;
+                    
+                    // Tampilkan kembali stok sisa dan samakan nilainya dengan stok awal
                     inputSisa.parentElement.parentElement.style.display = 'block';
-                    inputSisa.value = "";
+                    inputSisa.value = inputStok.value; 
                     
                     btnSubmit.innerHTML = '<i class="fas fa-save"></i> Simpan Pakan Baru';
                     btnSubmit.className = 'btn btn-save';
                 }
             });
+
+            // Validasi Visual (Border Hijau)
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== "") {
+                        this.classList.add('is-valid');
+                    } else {
+                        this.classList.remove('is-valid');
+                    }
+                });
+            });
+        });
             
             // Reset border color saat input diisi
             const inputs = form.querySelectorAll('input');

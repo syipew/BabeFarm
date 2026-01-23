@@ -317,20 +317,19 @@
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-boxes"></i>
-                            Stok Awal
+                            Stok Awal (Total Pengadaan)
                         </label>
                         <div class="input-group">
-                            <input type="number" 
-                                   name="stok_awal" 
-                                   id="stok_awal"
-                                   class="form-control" 
-                                   placeholder="0"
-                                   min="0"
-                                   value="<?= $pakan->stok_awal ?? 0 ?>"
-                                   required>
+                            <input type="number" name="stok_awal" id="stok_awal"
+                                class="form-control" 
+                                value="<?= $pakan->stok_awal ?>"
+                                required min="0">
                             <span class="input-icon">unit</span>
                         </div>
-                        <div class="form-text">Stok awal pakan</div>
+                        <div class="form-text text-warning">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            Hanya ubah jika ada kesalahan input data awal.
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -399,148 +398,91 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const stokAwal = document.getElementById('stok_awal');
-            const stokSisa = document.getElementById('stok_sisa');
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Deklarasi Variabel
+    const form = document.getElementById('formEditPakan');
+    const stokAwalInput = document.getElementById('stok_awal');
+    const stokSisaInput = document.getElementById('stok_sisa');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
 
-            function validasi() {
-                // Pada EDIT, stok sisa tidak boleh lebih dari stok awal (logika audit)
-                if (parseInt(stokSisa.value) > parseInt(stokAwal.value)) {
-                    stokSisa.setCustomValidity('Stok sisa tidak mungkin melebihi total stok awal (riwayat).');
-                } else {
-                    stokSisa.setCustomValidity('');
-                }
-            }
+    // 2. Fungsi Validasi Stok (Logika Utama)
+    function validateStok() {
+        const awal = parseInt(stokAwalInput.value) || 0;
+        const sisa = parseInt(stokSisaInput.value) || 0;
 
-            stokAwal.addEventListener('input', validasi);
-            stokSisa.addEventListener('input', validasi);
-        });
-                        
-            // Validasi stok sisa tidak boleh lebih besar dari stok awal
-            function validateStok() {
-                const stokAwal = parseInt(stokAwalInput.value) || 0;
-                const stokSisa = parseInt(stokSisaInput.value) || 0;
-                
-                if (stokSisa > stokAwal) {
-                    stokSisaInput.classList.add('is-invalid');
-                    stokSisaInput.classList.remove('is-valid');
-                    return false;
-                } else {
-                    stokSisaInput.classList.remove('is-invalid');
-                    stokSisaInput.classList.add('is-valid');
-                    return true;
-                }
-            }
-            
-            // Event listeners untuk validasi real-time
-            stokAwalInput.addEventListener('input', validateStok);
-            stokSisaInput.addEventListener('input', validateStok);
-            
-            // Initial validation
-            validateStok();
-            
-            // Form validation
-            form.addEventListener('submit', function(e) {
-                let isValid = true;
-                const inputs = form.querySelectorAll('input[required]');
-                
-                // Reset semua validasi
-                inputs.forEach(input => {
-                    input.classList.remove('is-invalid', 'is-valid');
-                });
-                
-                // Validasi field wajib
-                inputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        input.classList.add('is-valid');
-                    }
-                });
-                
-                // Validasi khusus stok
-                if (!validateStok()) {
-                    isValid = false;
-                    showToast('Stok sisa tidak boleh lebih besar dari stok awal!', 'danger');
-                }
-                
-                // Validasi angka positif
-                const numberInputs = form.querySelectorAll('input[type="number"]');
-                numberInputs.forEach(input => {
-                    const value = parseInt(input.value) || 0;
-                    if (value < 0) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    }
-                });
-                
-                if (!isValid) {
-                    e.preventDefault();
-                    showToast('Harap isi semua field dengan benar!', 'danger');
-                } else {
-                    // Show loading
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memperbarui...';
-                    submitBtn.disabled = true;
-                    
-                    // Simulasi pengiriman data (dalam implementasi nyata, hapus timeout ini)
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        showToast('Data pakan berhasil diperbarui!', 'success');
-                    }, 1500);
-                }
-            });
-            
-            // Reset border color saat input diisi
-            const inputs = form.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value.trim()) {
-                        this.classList.remove('is-invalid');
-                        this.classList.add('is-valid');
-                    }
-                });
-            });
-        });
-        
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            // Remove existing toasts
-            const existingToasts = document.querySelectorAll('.toast');
-            existingToasts.forEach(toast => toast.remove());
-            
-            const toast = document.createElement('div');
-            toast.className = `toast align-items-center text-white bg-${type} border-0`;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'assertive');
-            toast.setAttribute('aria-atomic', 'true');
-            toast.style.position = 'fixed';
-            toast.style.top = '20px';
-            toast.style.right = '20px';
-            toast.style.zIndex = '9999';
-            toast.style.minWidth = '250px';
-            
-            toast.innerHTML = `
-                <div class="d-flex align-items-center p-3">
-                    <div class="toast-body d-flex align-items-center">
-                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'} me-3 fs-5"></i>
-                        <span class="me-3">${message}</span>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
-                </div>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.remove();
-                }
-            }, 5000);
+        if (sisa > awal) {
+            // Jika sisa > awal, beri warna merah pada keduanya agar user sadar ada yang janggal
+            stokSisaInput.classList.add('is-invalid');
+            stokAwalInput.classList.add('is-invalid');
+            stokSisaInput.setCustomValidity('Sisa tidak boleh lebih dari awal');
+            return false;
+        } else {
+            stokSisaInput.classList.remove('is-invalid');
+            stokAwalInput.classList.remove('is-invalid');
+            stokSisaInput.setCustomValidity('');
+            return true;
         }
-    </script>
+    }
+    
+    // 3. Event Listeners untuk Real-time Validation
+    stokAwalInput.addEventListener('input', validateStok);
+    stokSisaInput.addEventListener('input', validateStok);
+
+    // 4. Validasi Saat Form Dikirim (Submit)
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        const inputs = form.querySelectorAll('input[required]');
+
+        // Validasi field kosong
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                input.classList.add('is-valid');
+            }
+        });
+
+        // Cek logika stok sekali lagi
+        if (!validateStok()) {
+            isValid = false;
+            showToast('Stok sisa tidak boleh lebih besar dari stok awal!', 'danger');
+        }
+
+        if (!isValid) {
+            e.preventDefault(); // Batalkan pengiriman jika tidak valid
+            showToast('Harap periksa kembali input Anda!', 'danger');
+        } else {
+            // Animasi Loading
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memperbarui...';
+            submitBtn.disabled = true;
+            
+            // Catatan: Form akan terkirim secara otomatis ke PHP action Anda
+            // kecuali Anda menggunakan AJAX.
+        }
+    });
+
+    // 5. Toast Function
+    function showToast(message, type = 'info') {
+        const existingToasts = document.querySelectorAll('.toast');
+        existingToasts.forEach(t => t.remove());
+
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0 show`;
+        toast.style.cssText = "position:fixed; top:20px; right:20px; z-index:9999; min-width:250px;";
+        
+        toast.innerHTML = `
+            <div class="d-flex align-items-center p-3">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-3"></i>
+                <span>${message}</span>
+                <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>`;
+        
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+});
+</script>
 </body>
