@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'babe_farm',
+	'hostname' => getenv('gateway01.eu-central-1.prod.aws.tidbcloud.com'),
+	'username' => getenv('3rmKYM3fEo1qXp8.vu-Zha7aIEQ'),
+	'password' => getenv(''),
+	'database' => getenv('test'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
